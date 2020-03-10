@@ -1,3 +1,4 @@
+import json
 import os
 
 import pandas as pd
@@ -25,19 +26,30 @@ class YahooStock:
         fig.update_layout(yaxis_type="log", title=f"{path.split('/')[:-1]} price")
         return fig
 
-    def getPaths(selfs, configPath: str = '/home/khoa/Documents/plotting.python/config.json', extension:str = ".csv"):
+    def getPaths(selfs, configPath: str = '/home/khoa/Documents/plotting.python/config.json', extension: str = ".csv"):
         '''
         Read config file for the path of yahoo data, then file fully qualified paths to those files.
         :param configPath:
         :param extension:
-        :return:
+        :return: []: list of paths to read.
         '''
-        paths:[]=[]
-        with json.loads(configPath) as configDict:
+        paths: [] = []
+        with open(configPath) as json_file:
+            configDict: dict = json.load(json_file)
             fileList: [] = []
             for path, name, fileNames in os.walk(configDict["paths"]["data"] + configDict["paths"]["yahooData"]):
                 for file in fileNames:
                     if extension in file:
-                        paths.append(os.path.join(r, file))
+                        paths.append(os.path.join(path, file))
+
         return paths
 
+
+if __name__ == "__main__":
+    yahooStock: YahooStock = YahooStock()
+    paths: [] = yahooStock.getPaths()
+    graphs: [] = []
+    for path in paths:
+        graphs.append(yahooStock.plotFile(path))
+    for graph in graphs:
+        graph.show()
