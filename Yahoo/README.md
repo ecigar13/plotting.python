@@ -1,0 +1,1 @@
+## This conctains a class that reads and graph all yahoo historical stock data

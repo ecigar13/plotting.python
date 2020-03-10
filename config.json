@@ -1,0 +1,11 @@
+{
+  "paths": {
+    "data": "/data",
+    "yahooData": "/yahoo",
+    "yahooReader": "/Yahoo",
+    "projectPath": "/home/khoa/Documents/plotting.python"
+  },
+  "readableFileExtensions": [
+    "csv"
+  ]
+}

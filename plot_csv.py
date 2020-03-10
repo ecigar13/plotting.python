@@ -10,7 +10,7 @@ with open('vixcurrent.csv', 'r') as file_out:
         for line in file_out:
             file_in.write(line)
 
-uvxy_df: DataFrame = pd.read_csv('UVXY.csv')
+uvxy_df: DataFrame = pd.read_csv('TVIX.csv')
 vix_df: DataFrame = pd.read_csv('vixcurrent_fixed.csv')
 
 uvxy_fig: Figure = go.Figure(go.Scatter(x=uvxy_df['Date'], y=uvxy_df['High'], name='high', mode='lines'))
