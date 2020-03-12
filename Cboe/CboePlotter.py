@@ -2,15 +2,19 @@ import json
 import logging
 import logging.config
 import os
+from os import path
+
 import pandas as pd
 from pandas import *
 import plotly.graph_objects as go
 
-logging.config.fileConfig("../config/logging.config")
+abs_path: str = os.path.dirname(os.path.abspath(__file__))
+log_file_path: str = path.join(path.dirname(path.abspath(__file__)), '../config/logging.config')
+logging.config.fileConfig(log_file_path)
 logger = logging.getLogger(__name__)
 
 
-class YahooStock:
+class CboePlotter:
     '''
     Read yahoo stock information and process it.
     '''
@@ -21,7 +25,7 @@ class YahooStock:
         :param path: str: path to file.
         :return:
         '''
-        dataFrame: DataFrame = pd.read_csv(path)
+        dataFrame: DataFrame = pd.read_csv(path, skiprows=1)
         column_header: DataFrame = dataFrame.loc[:, dataFrame.columns != 'Date']
         fig: Figure = go.Figure()
         for header in column_header:
@@ -40,17 +44,18 @@ class YahooStock:
         :return: []: list of paths to read.
         '''
         paths: [] = []
-        with open(config_path) as json_file:
+        with open(os.path.join(abs_path, config_path)) as json_file:
             config_dict: dict = json.load(json_file)
-            readable_extensions: [] = config_dict['readableFileExtensions']['yahoo']
+            readable_extensions: [] = config_dict['readableFileExtensions']['cboe']
             dir: str = os.path.abspath(
-                os.path.join("..", config_dict["paths"]["data"],
-                             config_dict["paths"]['yahoo']["data"]))
+                os.path.join(config_dict['projectPath'], config_dict["paths"]["data"],
+                             config_dict["paths"]['cboe']["data"]))
             logger.info(f"Searching in {dir}")
             for root, folders, files in os.walk(dir):
                 for file in files:
                     if any(extension in file for extension in readable_extensions):
-                        logger.debug(f"Found file {os.path.join(root, file)}")
+                        logger.debug(
+                            f"Found file {os.path.join(config_dict['projectPath'], root, file)}")
                         paths.append(os.path.join(root, file))
 
         logger.info(f"Found {len(paths)} data files")
@@ -58,11 +63,11 @@ class YahooStock:
 
 
 if __name__ == "__main__":
-    yahooStock: YahooStock = YahooStock()
-    files: [] = yahooStock.get_paths()
+    cboePlotter: CboePlotter = CboePlotter()
+    files: [] = cboePlotter.get_paths()
     graphs: [] = []
     for file in files:
-        graphs.append(yahooStock.plot_file(file))
+        graphs.append(cboePlotter.plot_file(file))
     logger.info(f"We have {len(graphs)} graphs")
     for graph in graphs:
         graph.show()
