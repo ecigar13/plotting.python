@@ -21,7 +21,7 @@ class YahooStock:
         :param path: str: path to file.
         :return:
         '''
-        dataFrame: DataFrame = pd.read_csv(path)
+        dataFrame: DataFrame = pd.read_csv(path, skiprows=1)
         column_header: DataFrame = dataFrame.loc[:, dataFrame.columns != 'Date']
         fig: Figure = go.Figure()
         for header in column_header:
@@ -42,10 +42,10 @@ class YahooStock:
         paths: [] = []
         with open(config_path) as json_file:
             config_dict: dict = json.load(json_file)
-            readable_extensions: [] = config_dict['readableFileExtensions']['yahoo']
+            readable_extensions: [] = config_dict['readableFileExtensions']['cboe']
             dir: str = os.path.abspath(
                 os.path.join("..", config_dict["paths"]["data"],
-                             config_dict["paths"]['yahoo']["data"]))
+                             config_dict["paths"]['cboe']["data"]))
             logger.info(f"Searching in {dir}")
             for root, folders, files in os.walk(dir):
                 for file in files:
@@ -58,11 +58,11 @@ class YahooStock:
 
 
 if __name__ == "__main__":
-    yahooStock: YahooStock = YahooStock()
-    files: [] = yahooStock.get_paths()
+    cboePlotter: YahooStock = YahooStock()
+    files: [] = cboePlotter.get_paths()
     graphs: [] = []
     for file in files:
-        graphs.append(yahooStock.plot_file(file))
+        graphs.append(cboePlotter.plot_file(file))
     logger.info(f"We have {len(graphs)} graphs")
     for graph in graphs:
         graph.show()

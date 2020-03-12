@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from pandas import *
 from plotly.graph_objs._figure import *
 
-with open('vixcurrent.csv', 'r') as file_out:
+with open('data/cboe/vixcurrent.csv', 'r') as file_out:
     with open('vixcurrent_fixed.csv', 'w') as file_in:
         next(file_out)   # get rid of first line
         for line in file_out:

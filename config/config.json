@@ -1,0 +1,22 @@
+{
+  "paths": {
+    "data": "data",
+    "yahoo": {
+      "data": "yahoo",
+      "reader": "Yahoo"
+    },
+    "cboe": {
+      "data": "cboe",
+      "reader": "Cboe"
+    }
+  },
+  "projectPath": "/home/khoa/Documents/plotting.python",
+  "readableFileExtensions": {
+    "yahoo": [
+      ".csv"
+    ],
+    "cboe": [
+      ".csv"
+    ]
+  }
+}
